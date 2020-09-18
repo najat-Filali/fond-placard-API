@@ -23,6 +23,7 @@ public class IngredientImpl implements IIngredient {
 
 	public Ingredient findById(int id) throws SQLException {
 		Ingredient ingredient = ingredientDao.findById(id);
+
 		return ingredient;
 
 	}

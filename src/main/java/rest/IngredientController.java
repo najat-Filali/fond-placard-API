@@ -1,14 +1,18 @@
 package rest;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,35 +20,34 @@ import business.IIngredient;
 import entities.Ingredient;
 
 @RestController
-@RequestMapping("/ingredient")
+@RequestMapping("/ingredients")
 public class IngredientController {
 
 	@Autowired
-	private IIngredient ingBuisness;
+	private IIngredient ingBusiness;
 
-	@GET
+	@GetMapping
 	public List<Ingredient> getAll() throws SQLException {
-		List<Ingredient> list = ingBuisness.findAll();
-		return list;
+		return ingBusiness.findAll();
 	}
 
-	@POST
-	@Path("/create")
-	public void createIngredient(@PathVariable String name) throws SQLException {
-		ingBuisness.add(name);
+	@PostMapping("/create")
+	public ResponseEntity<Ingredient> createIngredient(@PathVariable("name") String name) throws SQLException {
+		ingBusiness.add(name);
+		return new ResponseEntity<Ingredient>(new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@GET
-	@Path("/{id}")
-	public Ingredient getIngredient(@PathVariable int id) throws SQLException {
-		Ingredient ingredient = ingBuisness.findById(id);
-		return ingredient;
+	@GetMapping("/{id}")
+	public ResponseEntity<Ingredient> getIngredient(@PathVariable("id") int id) throws SQLException {
+		Ingredient ingredient = ingBusiness.findById(id);
+		return new ResponseEntity<Ingredient>(ingredient, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@POST
-	@Path("/{id}")
-	public void deleteIngredient(@PathVariable int id) throws SQLException {
-		ingBuisness.deleteIngredient(id);
-
+	@DeleteMapping("/{id}")
+	public Map<String, Boolean> deleteIngredient(@PathVariable("id") int id) throws SQLException {
+		ingBusiness.deleteIngredient(id);
+		Map<String, Boolean> response = new HashMap<String, Boolean>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
 	}
 }

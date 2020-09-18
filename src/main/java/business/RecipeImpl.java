@@ -2,7 +2,6 @@ package business;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 import dao.RecipeDao;
 import entities.Ingredient;
@@ -12,14 +11,14 @@ public class RecipeImpl implements IRecipe {
 
 	private RecipeDao recipeDao;
 
-	public Recipe addRecipe(String name, String category, String picture, Set<Ingredient> ingredients)
+	public Recipe addRecipe(String name, String category, String picture, List<Ingredient> ingredients)
 			throws SQLException {
 
 		Recipe recipe = new Recipe();
 		recipe.setName(name);
 		recipe.setPicture(picture);
 		recipe.setCategory(category);
-		// set List<Ingr>
+		// TODO set List<Ingr>
 		this.recipeDao.create(recipe);
 		return recipe;
 
